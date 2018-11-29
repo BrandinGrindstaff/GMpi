@@ -1,22 +1,19 @@
-#!/usr/bin/env python3
-
 from GMPi_Pack import Sense
 from GMPi_Pack import UploadFile
+from GMPi_Pack import OpenFile
 from GMPi_Pack import PicSnap
+from GMPi_Pack import AlertPerameters
 from GMPi_Pack import LightAlert
-from GMPi_Pack import ReadConfig
 
-config = ReadConfig()
-filepath = config["output_path"]
-rcloneProfile = config["rclone_profile"]
-whichDHT = config["which_dht"]
-whichDataPin = config["which_data_pin"]
-minLight = config["minimum_light_threshold"]
-maxLight = config["maximum_light_threshold"]
+filepath = '/home/pi/uploadFolder/'
+rcloneProfile = 'myBox'
+whichDHT = 22
+whichDataPin = 4
+minLight, maxLight = AlertPerameters()
 
 print( "Light Perameters Set")
 print('Max is: {}'.format(maxLight))
-print('Min is: {}'.format(minLight))
+print('Min is: {}' .format(minLight))
 #OpenFile(filepath)
 
 #sense also returns current light intensity value, possiably others in the future.
