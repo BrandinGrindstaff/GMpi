@@ -1,4 +1,4 @@
-# GMpi
+# GMpi---NOT UP TO DATE
 A growth chamber sensing system using the Raspberry Pi as a platform
 
 
