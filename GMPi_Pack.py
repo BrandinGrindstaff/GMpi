@@ -134,11 +134,11 @@ def LightAlertSlack(slack_webhook):
                 slack_webhook,
                 data=json.dumps(
                     slack_message
-                    ),
+                ),
                 headers={
                     'Content-Type': 'application/json'
-                    }
-            )
+                }
+        )
     except requests.exceptions.HTTPError as e:
         print('Failed to send slack message')
         print(e)
