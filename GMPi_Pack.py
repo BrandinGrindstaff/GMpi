@@ -6,6 +6,8 @@ import Adafruit_DHT
 import tsl2591
 import numpy
 import smtplib
+import requests
+import json
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email import encoders
@@ -112,6 +114,34 @@ def LightAlert(email_sender, email_receiver):
    server.sendmail(email_sender, email_reciever, text)
    server.quit()
 
+def LightAlertSlack(slack_webhook):
+    post = requests.post
+    alert_title = ':bulb: *Growth Chamber Alert*'
+    alert_message = 'Light below threshold during operation time!'
+    alert_attachment = [
+            {
+                'fallback': alert_message,
+                'text': alert_message,
+                'color': 'danger'
+            }
+    ]
+    slack_message = {
+            'text': alert_title,
+            'attachments': alert_attachment
+    }
+    try:
+        post(
+                slack_webhook,
+                data=json.dumps(
+                    slack_message
+                ),
+                headers={
+                    'Content-Type': 'application/json'
+                }
+        )
+    except requests.exceptions.HTTPError as e:
+        print('Failed to send slack message')
+        print(e)
 
 def Sense(filepath, whichDHT, whichDataPin):
    # keeps track of the time
