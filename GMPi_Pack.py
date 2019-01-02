@@ -44,13 +44,13 @@ def OpenFile(filepath):
 def BuildConfig(which_dht, which_data_pin):
 	light    = array('f',[0]*10)
 	temp     = array('f',[0]*10)
-	humid = array('f',[0]*10)
+	humid    = array('f',[0]*10)
 
 	for i in range(10):
 		tsl = tsl2591.Tsl2591() # initialize light sensor
 		full, ir = tsl.get_full_luminosity()  # read raw values (full spectrum and IR)
 		lux = tsl.calculate_lux(full, ir) # convert raw values to lux
-		humidity, temperature = Adafruit_DHT.read_retry(which_dht, which_data_pin)
+		humidity, temperature = Adafruit_DHT.read_retry(int(which_dht), int(which_data_pin))
 		light[i] = lux
 		temp[i]  = temperature
 		humid[i] = humidity
