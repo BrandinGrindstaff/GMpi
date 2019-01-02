@@ -23,8 +23,8 @@ print('Min is: {}'.format(minLight))
 sense_out = Sense(filepath, whichDHT, whichDataPin)
 
 if (sense_out["lux"] < minLight or sense_out["lux"] > maxLight):
-   SlackAlert(config["slack_webhook"], "Light")
-   print('LightAlert sent')
+	SlackAlert(config["slack_webhook"], "Light")
+	print('LightAlert sent')
 #UploadFile(filepath, rcloneProfile)
 #PicSnap(filepath, rcloneProfile)
 

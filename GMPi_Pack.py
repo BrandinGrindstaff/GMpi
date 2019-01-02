@@ -16,7 +16,7 @@ from array import *
 
 
 def PicSnap(filepath, rcloneProfile, rclonePath):
-  #default file path is '/home/pi/uploadFolder/'
+	#default file path is '/home/pi/uploadFolder/'
 	#default rcloneProfile is 'myBox'
 	timeStamp = datetime.datetime.today().strftime("%Y-%m-%d_%H:%M")
 	os.system('raspistill -vf -o {}image_{}.jpeg'.format(filepath, timeStamp))
@@ -69,10 +69,10 @@ def BuildConfig():
 	config = open('config.txt', 'w')
 	config.write('minimum_light_threshold={}\n'.format(minimum))
 	config.write('maximum_light_threshold={}\n'.format(maximum))
-  config.write('minimum_temp_threshold=<REPLACE>\n')
-  config.write('maximum_temp_threshold=<REPLACE>\n')
-  config.write('minimum_humidity_threshold=<REPLACE>\n')
-  config.write('maximum_humidity_threshold=<REPLACE>\n')
+	config.write('minimum_temp_threshold=<REPLACE>\n')
+	config.write('maximum_temp_threshold=<REPLACE>\n')
+	config.write('minimum_humidity_threshold=<REPLACE>\n')
+	config.write('maximum_humidity_threshold=<REPLACE>\n')
 	config.write('output_path=<REPLACE>\n')
 	config.write('which_dht=22\n')
 	config.write('which_data_pin=<REPLACE>\n')
@@ -124,29 +124,29 @@ def SlackAlert(slack_webhook, BadPart):
 	alert_title = ':bulb: *Growth Chamber Alert*'
 	alert_message = '{} below threshold during operation time!'.format(BadPart)
 	alert_attachment = [
-				{
-					'fallback': alert_message,
-					'text': alert_message,
-					'color': 'danger'
-				}
-	 ]
-	 slack_message = {
-				'text': alert_title,
-				'attachments': alert_attachment
-	 }
-	 try:
-		  post(
-					slack_webhook,
-					data=json.dumps(
-					   slack_message
-					 ),
-					 headers={
-						  'Content-Type': 'application/json'
-					 }
-		  )
-	 except requests.exceptions.HTTPError as e:
-		  print('Failed to send slack message')
-		  print(e)
+		{
+			'fallback': alert_message,
+			'text': alert_message,
+			'color': 'danger'
+		}
+	]
+	slack_message = {
+		'text': alert_title,
+		'attachments': alert_attachment
+	}
+	try:
+		post(
+			slack_webhook,
+			data=json.dumps(
+				slack_message
+			),
+			headers={
+				'Content-Type': 'application/json'
+			}
+		)
+	except requests.exceptions.HTTPError as e:
+		print('Failed to send slack message')
+		print(e)
 
 def Sense(filepath, whichDHT, whichDataPin):
 	# keeps track of the time
@@ -159,10 +159,9 @@ def Sense(filepath, whichDHT, whichDataPin):
 	date2 = datetime.datetime.today() - datetime.timedelta(days=1)
 	config = ReadConfig()
 	if not os.path.exists('{}sensorOutput_{}.txt'.format(filepath, date)):
-		 OpenFile(filepath)
-		 if config["upload_once_per_day"] == 'True':
-			  pass
-			  UploadFile2(filepath, config["rclone_profile"], config["rclone_path"], date2.strftime("%Y-%m-%d"))
+		OpenFile(filepath)
+	if config["upload_once_per_day"] == 'True':
+		UploadFile2(filepath, config["rclone_profile"], config["rclone_path"], date2.strftime("%Y-%m-%d"))
 	else:
 		pass
 	f = open('{}sensorOutput_{}.txt'.format(filepath, date) ,'a')
@@ -171,11 +170,13 @@ def Sense(filepath, whichDHT, whichDataPin):
 	humidity, temperature = Adafruit_DHT.read_retry(whichDHT, whichDataPin)
 	full, ir = tsl.get_full_luminosity()  # read raw values (full spectrum and ir spectrum)
 	lux = tsl.calculate_lux(full, ir) # convert raw values to lux
-	res = {"humidity": humidity,
-			   "temperature": temperature,
-			   "full": full,
-			   "ir": ir,
-			   "lux": lux}
+	res = {
+		"humidity": humidity,
+		"temperature": temperature,
+		"full": full,
+		"ir": ir,
+		"lux": lux
+	}
 
 	#below prints outputs in shell, and writes them to output{date}.txt
 	# This prints everything to the outut file in one line.
