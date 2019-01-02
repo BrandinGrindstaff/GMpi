@@ -2,7 +2,7 @@
 
 from GMPi_Pack import Sense
 from GMPi_Pack import ReadConfig
-from GMPi_Pack import LightAlert, ReadConfig
+from GMPi_Pack import SlackAlert, ReadConfig
 import datetime
 
 config = ReadConfig()
@@ -11,17 +11,21 @@ whichDataPin = int(config["which_data_pin"]) # default 4. What is the data pin?
 filepath = config["output_path"]
 sethour = datetime.datetime.now().strftime("%H") #hour of day
 hour = int(sethour)
-currentLight = Sense(filepath, whichDHT, whichDataPin)
+sense_out = Sense(filepath, whichDHT, whichDataPin)
 
-if hour >= 12 or hour <= 20:
-   maxLight = float(config["maximum_light_threshold"])
-   minLight = float(config["minimum_light_threshold"])
+maxLight = float(config["maximum_light_threshold"])
+minLight = float(config["minimum_light_threshold"])
+maxTemp = float(config["maximum_temp_threshold"])
+minTemp = float(config["minimum_temp_threshold"])
+maxHumidity = float(config["maximum_humidity_threshold"])
+minHumidity = float(config["minimum_humidity_threshold"])
 
-#for debugging
-   #print(currentLight)
-   #print(maxLight)
-   #print(minLight)
+if hour >= int(config["hr_lights_on"]) or hour <= int(config["hr_lights_off"]):
+	if (sense_out["lux"] < minLight or sense_out["lux"] > maxLight):
+		SlackAlert(config["slack_webhook"], "Light")
 
-   if (currentLight < minLight or currentLight > maxLight):
-      LightAlert(config["email_sender"], config["email_receiver"])
-      #print('Email Alert Sent!')
+if (sense_out["temperature"] < minTemp or sense_out["temperature"] > maxTemp):
+	SlackAlert(config["slack_webhook"], "Temperature")
+
+if (sense_out["humidity"] < minTemp or sense_out["humidity"] > maxTemp):
+	SlackAlert(config["slack_webhook"], "Humidity")
