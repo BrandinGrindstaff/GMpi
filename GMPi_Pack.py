@@ -14,7 +14,6 @@ from email import encoders
 from picamera import PiCamera
 from array import *
 
-
 def PicSnap(filepath, rcloneProfile, rclonePath):
 	#default file path is '/home/pi/uploadFolder/'
 	#default rcloneProfile is 'myBox'
@@ -42,40 +41,43 @@ def OpenFile(filepath):
 	print("date", "time", "temp", "humidity", "full_spectrum", "infrared", "lux", sep=",", file=f)
 	f.close()
 
+def BuildConfig(which_dht, which_data_pin):
+	light    = array('f',[0]*10)
+	temp     = array('f',[0]*10)
+	humid = array('f',[0]*10)
 
-def BuildConfig():
-	data = array('f',[0]*10)
-	datum = 0
-
-	for f in data:
+	for i in range(10):
 		tsl = tsl2591.Tsl2591() # initialize light sensor
 		full, ir = tsl.get_full_luminosity()  # read raw values (full spectrum and IR)
 		lux = tsl.calculate_lux(full, ir) # convert raw values to lux
-		data[datum] = lux
-		datum += 1
+		humidity, temperature = Adafruit_DHT.read_retry(which_dht, which_data_pin)
+		light[i] = lux
+		temp[i]  = temperature
+		humid[i] = humidity
+
 		#time.sleep(1)
 
 	#the maximum and minimum values of light in lux recorded by sensor
-	minLight = min(data)
-	maxLight = max(data)
+	minLight = min(light)
+	maxLight = max(light)
+	minTemp  = min(temp)
+	maxTemp  = max(temp)
+	minHumid = min(humid)
+	maxHumid = max(humid)
 	#The buffer variable adds a buffer to max and min values to prevent unwarranted alerts; change this value to your preference.
 	buffer = 10
 
-	#the maximum and minimum values of light in lux with buffer applied
-	minimum = minLight - buffer
-	maximum = maxLight + buffer
-
 	#creates a configuration file using these values is configurable in config.txt file.
 	config = open('config.txt', 'w')
-	config.write('minimum_light_threshold={}\n'.format(minimum))
-	config.write('maximum_light_threshold={}\n'.format(maximum))
-	config.write('minimum_temp_threshold=<REPLACE>\n')
-	config.write('maximum_temp_threshold=<REPLACE>\n')
-	config.write('minimum_humidity_threshold=<REPLACE>\n')
-	config.write('maximum_humidity_threshold=<REPLACE>\n')
+	config.write('minimum_light_threshold={}\n'.format(minLight - buffer))
+	config.write('maximum_light_threshold={}\n'.format(maxLight + buffer))
+	config.write('minimum_temp_threshold={}\n'.format(minTemp - 3))
+	config.write('maximum_temp_threshold={}\n'.format(maxTemp + 3))
+	config.write('minimum_humidity_threshold={}\n'.format(minHumidity - 5))
+	config.write('maximum_humidity_threshold={}\n'.format(maxHumidity + 5))
 	config.write('output_path=<REPLACE>\n')
-	config.write('which_dht=22\n')
-	config.write('which_data_pin=<REPLACE>\n')
+	config.write('which_dht={}\n'.format(which_dht))
+	config.write('which_data_pin={}\n'.format(which_data_pin))
 	config.write('slack_webhook=<REPLACE>\n')
 	config.write('rclone_profile=<REPLACE>\n')
 	config.write('rclone_path=<REPLACE>\n')
@@ -119,10 +121,10 @@ def LightAlert(email_sender, email_receiver):
 	server.sendmail(email_sender, email_reciever, text)
 	server.quit()
 
-def SlackAlert(slack_webhook, BadPart):
+def SlackAlert(slack_webhook, bad_part):
 	post = requests.post
 	alert_title = ':bulb: *Growth Chamber Alert*'
-	alert_message = '{} below threshold during operation time!'.format(BadPart)
+	alert_message = '{} below threshold during operation time!'.format(bad_part)
 	alert_attachment = [
 		{
 			'fallback': alert_message,
@@ -148,7 +150,7 @@ def SlackAlert(slack_webhook, BadPart):
 		print('Failed to send slack message')
 		print(e)
 
-def Sense(filepath, whichDHT, whichDataPin):
+def Sense(filepath, which_dht, which_data_pin):
 	# keeps track of the time
 	# hour = datetime.datetime.now().strftime("%H") #hour of day
 	# minute = datetime.datetime.now().strftime("%M") #minute of hour
@@ -167,7 +169,7 @@ def Sense(filepath, whichDHT, whichDataPin):
 	f = open('{}sensorOutput_{}.txt'.format(filepath, date) ,'a')
 	
 	#initialize the temp/humidity sensor. The Adafruit_DHT function takes(which DHT sensor you are using, which GPIO data pin you are using)
-	humidity, temperature = Adafruit_DHT.read_retry(whichDHT, whichDataPin)
+	humidity, temperature = Adafruit_DHT.read_retry(which_dht, which_data_pin)
 	full, ir = tsl.get_full_luminosity()  # read raw values (full spectrum and ir spectrum)
 	lux = tsl.calculate_lux(full, ir) # convert raw values to lux
 	res = {
