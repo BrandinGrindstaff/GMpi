@@ -64,17 +64,21 @@ def BuildConfig(which_dht, which_data_pin):
 	maxTemp  = max(temp)
 	minHumid = min(humid)
 	maxHumid = max(humid)
-	#The buffer variable adds a buffer to max and min values to prevent unwarranted alerts; change this value to your preference.
-	buffer = 10
+
+	# The buffer variable adds a buffer to max and min values to prevent unwarranted alerts
+	# Please feel free to adjust these values.
+	light_buffer    = 10
+	temp_buffer     = 3
+	humidity_buffer = 5
 
 	#creates a configuration file using these values is configurable in config.txt file.
 	config = open('config.txt', 'w')
-	config.write('minimum_light_threshold={}\n'.format(minLight - buffer))
-	config.write('maximum_light_threshold={}\n'.format(maxLight + buffer))
-	config.write('minimum_temp_threshold={}\n'.format(minTemp - 3))
-	config.write('maximum_temp_threshold={}\n'.format(maxTemp + 3))
-	config.write('minimum_humidity_threshold={}\n'.format(minHumid - 5))
-	config.write('maximum_humidity_threshold={}\n'.format(maxHumid + 5))
+	config.write('minimum_light_threshold={}\n'.format(minLight - light_buffer))
+	config.write('maximum_light_threshold={}\n'.format(maxLight + light_buffer))
+	config.write('minimum_temp_threshold={}\n'.format(minTemp - temp_buffer))
+	config.write('maximum_temp_threshold={}\n'.format(maxTemp + temp_buffer))
+	config.write('minimum_humidity_threshold={}\n'.format(minHumid - humidity_buffer))
+	config.write('maximum_humidity_threshold={}\n'.format(maxHumid + humidity_buffer))
 	config.write('output_path=<REPLACE>\n')
 	config.write('which_dht={}\n'.format(which_dht))
 	config.write('which_data_pin={}\n'.format(which_data_pin))

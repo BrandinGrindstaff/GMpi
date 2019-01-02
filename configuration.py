@@ -5,7 +5,6 @@ from sys import exit, argv
 from GMPi_Pack import BuildConfig
 
 print("Making configuration file: config.txt")
-print(len(argv))
 try:
 	if len(argv) == 3:
 		dht      = argv[1]
