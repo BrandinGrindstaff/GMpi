@@ -27,5 +27,5 @@ if hour >= int(config["hr_lights_on"]) or hour <= int(config["hr_lights_off"]):
 if (sense_out["temperature"] < minTemp or sense_out["temperature"] > maxTemp):
 	SlackAlert(config["slack_webhook"], "Temperature")
 
-if (sense_out["humidity"] < minTemp or sense_out["humidity"] > maxTemp):
+if (sense_out["humidity"] < minHumidity or sense_out["humidity"] > maxHumidity):
 	SlackAlert(config["slack_webhook"], "Humidity")
