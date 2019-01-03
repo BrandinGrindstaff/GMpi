@@ -167,7 +167,11 @@ def Sense(filepath, which_dht, which_data_pin):
 	if not os.path.exists('{}sensorOutput_{}.txt'.format(filepath, date)):
 		OpenFile(filepath)
 	if config["upload_once_per_day"] == 'True':
-		UploadFile2(filepath, config["rclone_profile"], config["rclone_path"], date2.strftime("%Y-%m-%d"))
+		try:
+			UploadFile2(filepath, config["rclone_profile"], config["rclone_path"], date2.strftime("%Y-%m-%d"))
+		except:
+			print("Failed to upload sensor readings from {}.\n".format(date2.strftime("%Y-%m-%d")))
+			pass
 	else:
 		pass
 	f = open('{}sensorOutput_{}.txt'.format(filepath, date) ,'a')
