@@ -90,7 +90,6 @@ def BuildConfig(which_dht, which_data_pin):
 	config.write('upload_once_per_day=True\n')
 	config.close()
 
-
 def ReadConfig():
 	config = open('config.txt', 'r')
 	res = {}
@@ -100,7 +99,7 @@ def ReadConfig():
 
 	return res
 
-
+"""
 def LightAlert(email_sender, email_receiver):
 	#set sender, recipients, and write subject here! Seperate by a ", " to add more! <MULTIPLE RECIPIENTS NOT TESTED!>
 	#email_sender = 'pireslabgrowthmonitor@gmail.com'
@@ -124,6 +123,7 @@ def LightAlert(email_sender, email_receiver):
 	server.login(email_sender, 'calvbDe68bIh*>%DQM')
 	server.sendmail(email_sender, email_reciever, text)
 	server.quit()
+"""
 
 def SlackAlert(slack_webhook, bad_part):
 	post = requests.post
