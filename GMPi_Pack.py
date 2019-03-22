@@ -128,7 +128,7 @@ def LightAlert(email_sender, email_receiver):
 def SlackAlert(slack_webhook, bad_part):
 	post = requests.post
 	alert_title = ':bulb: *Growth Chamber Alert*'
-	alert_message = '{} below threshold during operation time!'.format(bad_part)
+	alert_message = '{} out of user-specified range during operation time!'.format(bad_part)
 	alert_attachment = [
 		{
 			'fallback': alert_message,
