@@ -1,25 +1,40 @@
-# GMpi---NOT UP TO DATE
-A growth chamber sensing system using the Raspberry Pi as a platform
+## GMpi: A Growth Chamber Monitoring System Using the Raspberry Pi as a Platform
 
+The GMpi is a cost-effective solution for monitoring the conditions of a growth chamber,
+greenhouse, or any other facility for which specific conditions (temperature, light, humidity, etc.)
+need to be maintained.
 
-These scripts must be run in sequence.  
-	Run openFile.py first, 
-	sensingScript.py, and snapPic.py in any order after openFile.py
-	then upload.py last. 
+Please see our preprint for more information:
 
-They must all be run in "python3" to avoid errors. 
+> Grindstaff, G., M. E. Mabry, P. D. Blischak, M. Quinn, and J. C. Pires.
+> Affordable remote monitoring of plant growth and facilities using Raspberry Pi computers.
+> *bioRxiv*: [https://doi.org/10.1101/586776](https://doi.org/10.1101/586776).
 
-They also should not be run as admin,
-no "sudo" as it causes errors with permissions while uploading.
+The paper has a detailed protocol for setting up the Raspberry Pi and associated sensors.
+Our sotware package, `GMPi_Pack`, provides the tools needed to take sensor readings and photos,
+as well as synchronizing files with cloud storage services (e.g., Google Drive).
 
-a folder named "uploadFolder" must be created in home/pi/ to function because all file paths are hard coded.
+### Dependencies
+ - Python 3
+ - python-tsl2591 (Python package)
+ - Adafruit\_Python\_DHT (Python Package)
+ - rclone (may be pre-installed on the Raspberry Pi)
 
-an rclone config named "myBox" must be created
+### Getting Started
 
-in your cloud storage destination you must create a folder named "GMPi"
-with two folders inside it called "sensorOutput" and "photos".  
+The best way to get the `GMPi_Pack` software is to clone this repository:
 
-dependent on 2 external libraries and one program to run
-	python-tsl 2591 *requires a dependency called libffi to run.  aquire this via this command: sudo apt-get install libffi -dev
-	Adafruit_Python_DHT
-	rclone program
+```
+git clone https://github.com/BrandinGrindstaff/GMpi.git
+```
+
+After obtaining the software, change into the `GMpi` repo and run the `configuration.py`
+script.
+
+```
+cd GMpi
+python3 configuration.py
+```
+
+This will create a configuration file where all of the needed file paths and sensor thresholds
+can be set for monitoring. 
