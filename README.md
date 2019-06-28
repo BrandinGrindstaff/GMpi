@@ -29,12 +29,13 @@ git clone https://github.com/BrandinGrindstaff/GMpi.git
 ```
 
 After obtaining the software, change into the `GMpi` repo and run the `configuration.py`
-script.
+script, being sure to include which pins were used for the DHT and data sensors.
 
 ```
 cd GMpi
-python3 configuration.py
+python3 configuration.py <dht-pin> <data-pin>
 ```
 
-This will create a configuration file where all of the needed file paths and sensor thresholds
-can be set for monitoring. 
+This will create a configuration file (`config.txt`) where all of the needed file paths and sensor thresholds
+can be set for monitoring. Several of the values in the configuration file will be automatically set and
+values that need to be added by the user will be listed as `<REPLACE>`.
