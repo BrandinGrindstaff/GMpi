@@ -8,7 +8,7 @@ Please see our preprint for more information:
 
 > Grindstaff, G., M. E. Mabry, P. D. Blischak, M. Quinn, and J. C. Pires.
 > Affordable remote monitoring of plant growth and facilities using Raspberry Pi computers.
-> *bioRxiv*: [https://doi.org/10.1101/586776](https://doi.org/10.1101/586776).
+> *Applications in Plant Sciences* 7:e11280 [https://doi.org/10.1002/aps3.11280](https://doi.org/10.1002/aps3.11280).
 
 The paper has a detailed protocol for setting up the Raspberry Pi and associated sensors.
 Our sotware package, `GMPi_Pack`, provides the tools needed to take sensor readings and photos,
@@ -39,3 +39,10 @@ python3 configuration.py <dht-pin> <data-pin>
 This will create a configuration file (`config.txt`) where all of the needed file paths and sensor thresholds
 can be set for monitoring. Several of the values in the configuration file will be automatically set and
 values that need to be added by the user will be listed as `<REPLACE>`.
+
+### Plotting Sensor Output
+
+We also have a simple script for plotting sensor output. The script depends on the following Python packages:
+`pandas`, `seaborn`, and `matplotlib`, which can all be installed using `pip`.
+To run the script you will need to move it into the folder where you are storing
+the `sensorOutput*` files and then simply type `./plot_sensorOutput.py`.
